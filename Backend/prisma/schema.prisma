@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int                @id @default(autoincrement())
+  email             String             @unique
+  username          String
+  password          String
+  lastAnalysisDate  DateTime? 
+  transportation    Transportation[] 
+  energy            Energy[] 
+  appliancesUsage   AppliancesUsage[] 
+  waste             Waste[] 
+  totalEmission     TotalEmission[] 
+  waterUsage        WaterUsage[]       // Added Water Usage
+  airTravel         AirTravel[]        // Added Air Travel
+  analysisResponses AnalysisResponse[] 
+  communityPost     CommunityPost[]
+  communityComment  CommunityComment[]
+  communityAnswer   CommunityAnswer[]
+}
+
+model Transportation {
+  id               Int       @id @default(autoincrement())
+  userId           Int
+  date             String
+  distance         Float     // E.g., in km
+  transportType    String    @default("car")  // car, bus, train, bike
+  emissionFactor   Float     // CO2 factor for transportation
+  emissions        Float     // CO2 emissions for the activity
+  createdAt        DateTime  @default(now())
+  user             User      @relation(fields: [userId], references: [id])
+}
+
+model Energy {
+  id               Int       @id @default(autoincrement())
+  userId           Int
+  date             String
+  energyUsage      Float     // E.g., kWh
+  energyType       String    @default("grid")   // Grid or Renewable
+  emissionFactor   Float     // CO2 factor for energy
+  emissions        Float     // CO2 emissions for the activity
+  createdAt        DateTime  @default(now())
+  user             User      @relation(fields: [userId], references: [id])
+}
+
+model AppliancesUsage {
+  id               Int       @id @default(autoincrement())
+  userId           Int
+  date             String
+  applianceType    String    // E.g., Air Conditioner, Refrigerator
+  usageTime        Float     // Hours of usage
+  powerRating      Float     // kW of the appliance
+  emissions        Float     // CO2 emissions for the usage
+  emissionFactor   Float
+  createdAt        DateTime  @default(now())
+  user             User      @relation(fields: [userId], references: [id])
+}
+
+model Waste {
+  id               Int       @id @default(autoincrement())
+  userId           Int
+  date             String
+  wasteType        String    // E.g., recycling, composting, etc.
+  quantity         Float     // Amount of waste handled
+  emissionFactor   Float     // CO2 factor for waste
+  emissions        Float     // CO2 emissions for the activity
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  user             User      @relation(fields: [userId], references: [id])
+}
+
+model WaterUsage {
+  id               Int       @id @default(autoincrement())
+  userId           Int
+  date             String
+  waterUsage       Float     // E.g., in liters
+  waterType        String    // E.g., hot, cold
+  emissionFactor   Float     // CO2 equivalent per liter
+  emissions        Float     // CO2 emissions for water usage
+  createdAt        DateTime  @default(now())
+  user             User      @relation(fields: [userId], references: [id])
+}
+
+model AirTravel {
+  id               Int       @id @default(autoincrement())
+  userId           Int
+  date             String
+  flightDistance   Float     // E.g., in km
+  emissionFactor   Float     // CO2 equivalent per km
+  emissions        Float     // CO2 emissions for the flight
+  createdAt        DateTime  @default(now())
+  user             User      @relation(fields: [userId], references: [id])
+}
+
+model TotalEmission {
+  id                       Int      @id @default(autoincrement())
+  userId                   Int
+  date                     String
+  totalTransportationEmission Float
+  totalEnergyEmission      Float
+  totalWasteEmission       Float
+  totalAppliancesEmission  Float
+  totalWaterEmission       Float    // Added Water Usage Emissions
+  totalAirTravelEmission   Float    // Added Air Travel Emissions
+  totalEmissions           Float    // Sum of all emissions for the day
+  createdAt                DateTime @default(now())
+  user                     User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+}
+
+model AnalysisResponse {
+  id                       Int      @id @default(autoincrement())
+  userId                   Int
+  range                    String   // E.g., "7d", "30d"
+  date                     DateTime @default(now())
+  overallInsights          String
+  overallRecommendations   String
+  transportationInsights   String
+  transportationRecommendations String
+  energyInsights           String
+  energyRecommendations    String
+  wasteInsights            String
+  wasteRecommendations     String
+  appliancesInsights       String
+  appliancesRecommendations String
+  waterInsights            String
+  waterRecommendations     String
+  airTravelInsights        String
+  airTravelRecommendations String
+  user                     User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+}
+
+model CommunityPost {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  username   String   //Store username directly
+  content    String
+  isQuestion Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id])
+  comments   CommunityComment[]
+  answers    CommunityAnswer[]
+} 
+
+model CommunityAnswer {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  username  String   //Store username directly
+  postId    Int      // Links to a question in CommunityPost
+  content   String   // Answer content
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  post      CommunityPost @relation(fields: [postId], references: [id])
+}
+
+model CommunityComment {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  username  String   //Store username directly
+  postId    Int
+  content   String   // Comment content
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  post      CommunityPost @relation(fields: [postId], references: [id])
+}
