@@ -95,8 +95,6 @@ async function fetchDataForAnalysis(userId: number, range: string): Promise<Anal
   }
 }
 
-
-
 // Enhanced prompt engineering
 function createCategoryPrompt(
   category: string,
@@ -113,15 +111,14 @@ function createCategoryPrompt(
     .join('\n');
 
   return `
-Please analyze the following carbon emissions data for the "${category}" category and provide a concise, structured response.The word limit for your entire response is strictly 200 words. Each category must have small bullet points which are powerful and actionable. Maximum response for each category is just 50 words, give least possible output.Key Insights must be 50 words only and Recommendations strictly 50 words .Highlight the important key words.Your answer must strictly follow the exact format below:
+Please analyze the following carbon emissions data for the "${category}" category and provide a concise, structured response. The word limit for your entire response is strictly 200 words. Each category must have small bullet points which are powerful and actionable. Maximum response for each category is just 50 words, give least possible output. Key Insights must be 50 words only and Recommendations strictly 50 words. Highlight the important key words. Your answer must strictly follow the exact format below:
 
 --------------------------------------------------
 [Key Insights]
 - Concise bullet points of key observations, analysis and Main contributors to emissions. Always provide some Key Insights no matter what.
 
 [Recommendations]
-- Prioritized actionable recommendations and Cost-effective solutions . Always provide some Recommendations no matter what.
-
+- Prioritized actionable recommendations and Cost-effective solutions. Always provide some Recommendations no matter what.
 --------------------------------------------------
 Current ${category} data:
 ${emissionsData}
@@ -135,28 +132,38 @@ Focus on:
 `.trim();
 }
 
-// Improved response parsing with debug logging
+// Updated response parsing with flexible header matching
 function parseGeminiResponse(response: string): GeminiAnalysis {
   console.log('[DEBUG] Raw Gemini Response:', response);
 
-  // Flexible section splitting
-  const insightsSection = response.split(/\[Key Insights\]|Recommendations:|### Insights/gi)[1] || '';
-  const recommendationsSection = response.split(/\[Recommendations\]|### Recommendations/gi)[1] || '';
+  // Use a regex that matches various possible headers for insights and recommendations
+  const insightsRegex = /(?:\[Key Insights\]|##\s*Key Insights|###\s*Key Insights)[\s\S]*?(?=(?:\[Recommendations\]|##\s*Recommendations|###\s*Recommendations))/i;
+  const recommendationsRegex = /(?:\[Recommendations\]|##\s*Recommendations|###\s*Recommendations)[\s\S]*/i;
+
+  const insightsMatch = response.match(insightsRegex);
+  const recommendationsMatch = response.match(recommendationsRegex);
+
+  let insightsSection = insightsMatch ? insightsMatch[0] : '';
+  let recommendationsSection = recommendationsMatch ? recommendationsMatch[0] : '';
+
+  // Remove headers from the sections
+  insightsSection = insightsSection.replace(/(?:\[Key Insights\]|##\s*Key Insights|###\s*Key Insights)/i, '').trim();
+  recommendationsSection = recommendationsSection.replace(/(?:\[Recommendations\]|##\s*Recommendations|###\s*Recommendations)/i, '').trim();
 
   // Clean and format insights
   const insights = insightsSection
     .replace(/(\*\*|[-*]|•)/g, '')
     .split('\n')
-    .filter(line => line.trim().length > 0)
-    .map(line => line.replace(/^[\s-]+/, '').trim())
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
     .join('\n- ');
 
   // Clean and format recommendations
   const recommendations = recommendationsSection
     .replace(/(\*\*|[-*]|•)/g, '')
     .split('\n')
-    .filter(line => line.trim().length > 0)
-    .map(line => line.replace(/^[\s-]+/, '').trim())
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
     .join('\n- ');
 
   return {
