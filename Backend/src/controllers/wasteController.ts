@@ -15,11 +15,12 @@ export const AddWasteEmission = async (req: Request, res: Response) => {
         // Calculate the emissions for this entry
         const emissions = quantity * emissionFactor;
 
-        // Check if a waste record already exists for this user and date
+        // Check if a waste record already exists for this user, date, and wasteType
         const existingWasteRecord = await Prisma.waste.findFirst({
             where: {
                 userId: userId,
                 date: date,
+                wasteType: wasteType, // Ensure the wasteType matches
             },
         });
 
@@ -91,7 +92,7 @@ export const AddWasteEmission = async (req: Request, res: Response) => {
             },
         });
 
-        res.status(200).json( waste );
+        res.status(200).json(waste);
     } catch (error) {
         console.error("Error adding waste emission:", error);
         res.status(500).json({ message: "Internal server error" });

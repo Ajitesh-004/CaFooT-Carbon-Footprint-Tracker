@@ -15,11 +15,12 @@ export const AddWaterEmission = async (req: Request, res: Response) => {
         // Calculate the emissions for this entry
         const emissions = waterUsage * emissionFactor;
 
-        // Check if a water usage record already exists for this user and date
+        // Check if a water usage record already exists for this user, date, and waterType
         const existingWaterRecord = await Prisma.waterUsage.findFirst({
             where: {
                 userId: userId,
                 date: date,
+                waterType: waterType, // Ensure the waterType matches
             },
         });
 
@@ -91,7 +92,7 @@ export const AddWaterEmission = async (req: Request, res: Response) => {
             },
         });
 
-        res.status(200).json( waterUsageRecord );
+        res.status(200).json(waterUsageRecord);
     } catch (error) {
         console.error("Error adding water emission:", error);
         res.status(500).json({ message: "Internal server error" });
