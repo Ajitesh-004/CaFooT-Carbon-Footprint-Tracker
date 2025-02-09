@@ -218,7 +218,7 @@ type CategoryCardProps = {
  * CategoryCard shows details (insights, recommendations, detailed analysis) for each category.
  */
 const CategoryCard: React.FC<CategoryCardProps> = ({ title, data, icon: Icon }) => {
-  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [showDetails] = useState<boolean>(false);
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
@@ -249,20 +249,6 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ title, data, icon: Icon }) 
         </div>
 
         <div>
-          <button
-            onClick={() => setShowDetails(!showDetails)}
-            className="flex items-center gap-2 text-green-600 hover:text-green-700 transition-colors"
-          >
-            {showDetails ? (
-              <>
-                <ChevronUp className="w-4 h-4" /> Hide Detailed Analysis
-              </>
-            ) : (
-              <>
-                <ChevronDown className="w-4 h-4" /> Show Detailed Analysis
-              </>
-            )}
-          </button>
           
           {showDetails && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
@@ -405,7 +391,7 @@ const Analysis: React.FC = () => {
     const fetchPreviousAnalyses = async () => {
       if (!user?.id) return;
       try {
-        const prevResponse = await fetch(`http://localhost:5069/api/analysis/previous-analyses?userId=${user.id}`);
+        const prevResponse = await fetch(`https://cafoot-backend.onrender.com/api/analysis/previous-analyses?userId=${user.id}`);
         if (!prevResponse.ok) {
           throw new Error(`Previous analyses error: ${prevResponse.statusText}`);
         }
@@ -433,7 +419,7 @@ const Analysis: React.FC = () => {
       }
       
       // Fetch the current analysis from the backend.
-      const analysisResponse = await fetch(`http://localhost:5069/api/analysis/getanalysis?userId=${userId}`);
+      const analysisResponse = await fetch(`https://cafoot-backend.onrender.com/api/analysis/getanalysis?userId=${userId}`);
       if (!analysisResponse.ok) {
         throw new Error(`Current analysis error: ${analysisResponse.statusText}`);
       }
@@ -447,7 +433,7 @@ const Analysis: React.FC = () => {
       }));
 
       // Optionally, refetch previous analyses after current analysis.
-      const prevResponse = await fetch(`http://localhost:5069/api/analysis/previous-analyses?userId=${userId}`);
+      const prevResponse = await fetch(`https://cafoot-backend.onrender.com/api/analysis/previous-analyses?userId=${userId}`);
       if (!prevResponse.ok) {
         throw new Error(`Previous analyses error: ${prevResponse.statusText}`);
       }

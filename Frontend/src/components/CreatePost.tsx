@@ -18,7 +18,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ onPostCreated }) => {
     if (!content.trim()) return;
 
     try {
-      const response = await axios.post('http://localhost:5069/api/community/post', {
+      const response = await axios.post('https://cafoot-backend.onrender.com/api/community/post', {
         userId: user?.id,
         content,
         isQuestion,

@@ -12,7 +12,7 @@ const CommunityPage: React.FC = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:5069/api/community/posts');
+        const response = await axios.get('https://cafoot-backend.onrender.com/api/community/posts');
         if (Array.isArray(response.data)) {
           setPosts(response.data);
         }

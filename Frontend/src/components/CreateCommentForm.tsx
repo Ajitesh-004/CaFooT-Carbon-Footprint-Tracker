@@ -18,7 +18,7 @@ const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ postId, onComment
     if (!content.trim()) return;
 
     try {
-      const response = await axios.post('http://localhost:5069/api/community/comment', {
+      const response = await axios.post('https://cafoot-backend.onrender.com/api/community/comment', {
         userId: user?.id,
         postId,
         content,

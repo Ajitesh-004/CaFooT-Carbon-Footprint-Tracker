@@ -123,7 +123,7 @@ const Dashboard: React.FC = () => {
       if (!user?.id) return;
 
       try {
-        const response = await fetch(`http://localhost:5069/api/totalemission/gettotalemission/?userId=${user.id}`);
+        const response = await fetch(`https://cafoot-backend.onrender.com/api/totalemission/gettotalemission/?userId=${user.id}`);
         if (!response.ok) throw new Error('Failed to fetch total emissions');
         const data: TotalEmission = await response.json();
         setTotalEmissionData(data);
@@ -140,7 +140,7 @@ const Dashboard: React.FC = () => {
   // Fetch data for a specific category
   const fetchData = useCallback(async (endpoint: string, sortKey: string) => {
     try {
-      const response = await fetch(`http://localhost:5069/api/${endpoint}?userId=${user?.id}&sortBy=${sortKey}`);
+      const response = await fetch(`https://cafoot-backend.onrender.com/api/${endpoint}?userId=${user?.id}&sortBy=${sortKey}`);
       if (!response.ok) throw new Error(`Failed to fetch data from ${endpoint}`);
       return await response.json();
     } catch (error) {

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const RegisterAPI = async (username: string , email: string , password: string) => {
-    const response = await axios.post("http://localhost:5069/api/auth/register", {
+    const response = await axios.post("https://cafoot-backend.onrender.com/api/auth/register", {
         username,
         email,
         password

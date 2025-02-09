@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const LoginAPI = async (email: string, password: string) => {
-    const response = await axios.post("http://localhost:5069/api/auth/login", {
+    const response = await axios.post("https://cafoot-backend.onrender.com/api/auth/login", {
         email,
         password
     });

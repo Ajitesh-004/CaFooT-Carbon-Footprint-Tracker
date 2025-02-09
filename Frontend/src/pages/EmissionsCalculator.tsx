@@ -14,13 +14,13 @@ import ResultSection from '../components/ResultSection';
 
 // API endpoints
 const API_ENDPOINTS = {
-  transport: 'http://localhost:5069/api/transport/addtransportemission',
-  energy: 'http://localhost:5069/api/energy/addenergyemission',
-  waste: 'http://localhost:5069/api/waste/addwasteemission',
-  appliances: 'http://localhost:5069/api/appliance/addapplianceemission',
-  water: 'http://localhost:5069/api/water/addwateremission',
-  flight: 'http://localhost:5069/api/airtravel/addairtravelemission',
-  totalEmissions: 'http://localhost:5069/api/totalemission/gettotalemission', // Endpoint to fetch total emissions
+  transport: 'https://cafoot-backend.onrender.com/api/transport/addtransportemission',
+  energy: 'https://cafoot-backend.onrender.com/api/energy/addenergyemission',
+  waste: 'https://cafoot-backend.onrender.com/api/waste/addwasteemission',
+  appliances: 'https://cafoot-backend.onrender.com/api/appliance/addapplianceemission',
+  water: 'https://cafoot-backend.onrender.com/api/water/addwateremission',
+  flight: 'https://cafoot-backend.onrender.com/api/airtravel/addairtravelemission',
+  totalEmissions: 'https://cafoot-backend.onrender.com/api/totalemission/gettotalemission', // Endpoint to fetch total emissions
 };
 
 // Type for the TotalEmission object

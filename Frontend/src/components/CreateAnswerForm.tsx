@@ -18,7 +18,7 @@ const CreateAnswerForm: React.FC<CreateAnswerFormProps> = ({ postId, onAnswerAdd
     if (!content.trim()) return;
 
     try {
-      const response = await axios.post('http://localhost:5069/api/community/answer', {
+      const response = await axios.post('https://cafoot-backend.onrender.com/api/community/answer', {
         userId: user?.id,
         postId,
         content,
