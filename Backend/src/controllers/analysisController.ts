@@ -95,6 +95,8 @@ async function fetchDataForAnalysis(userId: number, range: string): Promise<Anal
   }
 }
 
+
+
 // Enhanced prompt engineering
 function createCategoryPrompt(
   category: string,
@@ -111,18 +113,14 @@ function createCategoryPrompt(
     .join('\n');
 
   return `
-Please analyze the following carbon emissions data for the "${category}" category and provide a detailed, structured response. Your answer must strictly follow the exact format below:
+Please analyze the following carbon emissions data for the "${category}" category and provide a concise, structured response.The word limit for your entire response is strictly 200 words. Each category must have small bullet points which are powerful and actionable. Maximum response for each category is just 50 words, give least possible output.Key Insights must be 50 words only and Recommendations strictly 50 words .Highlight the important key words.Your answer must strictly follow the exact format below:
 
 --------------------------------------------------
 [Key Insights]
-- Concise bullet points of key observations
-- Trend analysis and comparisons
-- Main contributors to emissions
+- Concise bullet points of key observations, Trend analysis and Main contributors to emissions
 
 [Recommendations]
-- Prioritized actionable steps
-- Specific metrics and goals
-- Cost-effective solutions
+- Prioritized actionable recommendations and Cost-effective solutions
 
 --------------------------------------------------
 Current ${category} data:
@@ -132,7 +130,7 @@ ${pastContext ? `Past Analysis Context:\n${pastContext}` : ''}
 
 Focus on:
 - Clear, specific recommendations
-- Measurable impact
+- Very short and powerful points
 - Practical implementation
 `.trim();
 }
