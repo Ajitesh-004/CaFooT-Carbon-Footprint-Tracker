@@ -10,6 +10,7 @@ import airtravelRoute from "./routes/airtravelRoute";
 import totalemissionRoute from "./routes/totalemissionRoute";
 import analysisRoute from "./routes/analysisRoute";
 import communityRoute from "./routes/communityRoute";
+import './initCredentials';
 
 const app = express();
 app.use(express.json());
