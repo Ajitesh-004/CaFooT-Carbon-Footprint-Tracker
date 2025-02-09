@@ -117,10 +117,10 @@ Please analyze the following carbon emissions data for the "${category}" categor
 
 --------------------------------------------------
 [Key Insights]
-- Concise bullet points of key observations, Trend analysis and Main contributors to emissions
+- Concise bullet points of key observations, analysis and Main contributors to emissions. Always provide some Key Insights
 
 [Recommendations]
-- Prioritized actionable recommendations and Cost-effective solutions
+- Prioritized actionable recommendations and Cost-effective solutions . Always provide some Recommendations
 
 --------------------------------------------------
 Current ${category} data:
