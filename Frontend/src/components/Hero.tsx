@@ -52,7 +52,7 @@ export const Hero = () => {
 
           {/* Video Section */}
           <div className="w-full lg:w-1/2">
-            <div className="relative h-64 sm:h-80 md:h-96 lg:h-full">
+            <div className="relative h-70 sm:h-80 md:h-96 lg:h-full">
               <video
                 className="h-full w-full object-cover"
                 autoPlay
